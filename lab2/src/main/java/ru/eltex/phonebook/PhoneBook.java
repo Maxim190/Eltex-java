@@ -1,4 +1,4 @@
-//package ru.eltex.phonebook;
+package ru.eltex.phonebook;
 
 import  java.util.*;
 
