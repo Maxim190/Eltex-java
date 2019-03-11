@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<title>PhoneBookServer</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("button").click(loadData);
+				$().load(loadData());
+			});
+
+			function loadData(){
+				$.ajax({
+					type: 'GET',
+					url: 'PhoneBook.csv',
+					success: function(data) {
+						$("#tablePhoneBook").html(data);
+					}
+				});
+			}
+		</script>
+	<head/>
+	<center>
+	<body>
+		<p> Hello, my brother!</p>
+		<p> Here you can find information about your debtors</p>
+		<div>
+			<button>Обновить данные</button>
+		</div>
+		<div id="tablePhoneBook">Oops! Try load PhoneBook again</div>
+		<a id="test" href="cat.html">Relax</a>
+	</body>
+	</center>
+</html> 
