@@ -1,6 +1,0 @@
-apply plugin: "java"
-apply plugin: "application"
-mainClassName="ru.eltex.server.Server"
-run {
-	standardInput = System.in
-}

@@ -1,0 +1,9 @@
+apply plugin: "java"
+apply plugin: "application"
+mainClassName="ru.eltex.server.Server"
+run {
+	standardInput = System.in
+}
+dependencies {
+	runtime files('libs/mysql-connector-java-8.0.15.jar')
+}
