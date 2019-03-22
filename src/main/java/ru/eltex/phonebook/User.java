@@ -2,11 +2,17 @@ package ru.eltex.phonebook;
 
 public class User {
 	
-	private Integer id;
+	private int id;
 	private String name;
 	private String phoneNumber;
-	private static int usersQuantity;
-	
+	private static int usersQuantity = 0;
+	private static int idHolder = 0;
+
+	public static void resetIdHolder(){
+		usersQuantity = 0;
+		idHolder = 0;
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -15,7 +21,7 @@ public class User {
 		return name;
 	}
 	
-	public void setName(String name) {
+	private void setName(String name) {
 		if(!name.isEmpty()) {
 			this.name = name;
 		}
@@ -25,27 +31,20 @@ public class User {
 		return phoneNumber;
 	}
 	
-	public void setPhoneNumber(String phoneNumber) {
+	private void setPhoneNumber(String phoneNumber) {
 		if(!phoneNumber.isEmpty()) {
 			this.phoneNumber = phoneNumber;
 		}
 	}
-	
-	public void setUsersQuantity(Integer id) {
-		if(id > usersQuantity) {
-			usersQuantity = id + 1;
-		}
-	}
-	
+
 	User(String name, String phoneNumber){
-		id =  usersQuantity++; 
-		setName(name);
-		setPhoneNumber(phoneNumber);
+		this(++idHolder, name, phoneNumber);
 	}
 	
-	User(Integer id, String name, String phoneNumber){
-		setUsersQuantity(id);
-		this.id = id; 
+	User(int id, String name, String phoneNumber){
+		if(idHolder < id)
+			idHolder = id;
+		this.id = id;
 		setName(name);
 		setPhoneNumber(phoneNumber);
 	}

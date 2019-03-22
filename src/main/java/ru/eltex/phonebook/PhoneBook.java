@@ -1,98 +1,68 @@
 package ru.eltex.phonebook;
 
-import java.io.*;
 import java.util.*;
 
-public class PhoneBook implements CSV{
+public class PhoneBook{
 
-	private String phoneBookDbName = "PhoneBook.csv";
-	private	ArrayList<User> usersArray;
-
-	public boolean addUser(String name, String phoneNumber) {
-		usersArray.add(new User(name, phoneNumber));
-		String str = getStrForCSV(getSizeBook() - 1);
-		toCSV(str, true);
-		return true;
-	}
-	
-	public void deleteUser(Integer id) {
-		for(int i = 0; i < getSizeBook(); i++) {
-			if(usersArray.get(i).getId() == id) {
-				usersArray.remove(i);
-				overwriteCSV();
-			}
-		}
-	}
-
-	public String getUserName(Integer numberInArray) {
-		return usersArray.get(numberInArray).getName();
-	}
-	
-	public String getUserPhoneNumber(Integer numberInArray) {		
-		return usersArray.get(numberInArray).getPhoneNumber();
-	}
-	
-	public Integer getUserId(Integer numberInArray) {
-		return usersArray.get(numberInArray).getId();
-	}
-	
-	public Integer getSizeBook() {
-		return usersArray.size();
-	}
-	
-	public ArrayList<User> getAllUsers(){
-		return usersArray;
-	}
+	private DataBase dataBase;
 
     public PhoneBook(){
-		usersArray = new ArrayList<User>();
-		fromCSV();
-	}
-    
-    public void overwriteCSV() {
-    	boolean append = false;
-    	Integer count = 0;
-    	for(User i : usersArray) {
-    		String str = getStrForCSV(count);
-    		toCSV(str, append);
-    		append = true;
-    		count++;
-    	}
-    }
-    
-    public String getStrForCSV(Integer id) {
-		Integer userId = usersArray.get(id).getId();
-		String name = usersArray.get(id).getName();
-		String phone = usersArray.get(id).getPhoneNumber();
-		String str = userId.toString() + ";" + name + ";" + phone;
-		return str;
-    }
-
-	@Override
-	public void toCSV(String str, boolean append) {
-		try {
-			FileWriter fw = new FileWriter(phoneBookDbName, append);
-			fw.write(str + "\n"); 
-			fw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		dataBase = new CSVBase();//new SqlBase();
+		createMenu();
 	}
 
-	@Override
-	public String fromCSV() {
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(phoneBookDbName));  
-			String buff = ""; 
-			while(( buff = br.readLine() ) != null) { 
-				String[] spliteStr = buff.split(";");
-				Integer id = Integer.valueOf(spliteStr[0]);
-				usersArray.add(new User(id, spliteStr[1], spliteStr[2]));
+	void createMenu(){
+		Scanner in = new Scanner(System.in);
+		System.out.println("PhoneBook");
+		while(true) {
+			printMenu();
+			System.out.print("input: ");
+			switch(in.nextInt()) {
+				case 1: showAllUsers(); break;
+				case 2: addUser(); break;
+				case 3: deleteUser(); break;
+				case 4: return;
+				default: return;
 			}
-		
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
-		return null;	
+	}
+
+	private void addUser() {
+		Scanner in = new Scanner(System.in);
+		System.out.print("Input name: ");
+		String name = in.nextLine();
+		System.out.print("Input phone number: ");
+		String number = in.nextLine();
+
+		dataBase.addUser(new User(name, number));
+	}
+
+	private void deleteUser() {
+		System.out.print("Input id: ");
+		Scanner in = new Scanner(System.in);
+		dataBase.deleteUserById(in.nextInt());
+	}
+
+	private void showAllUsers() {
+
+		System.out.println("id Name \tNumber");
+
+		for(User user : dataBase.getAllUsers()){
+			int id = user.getId();
+			String name = user.getName();
+			String phone = user.getPhoneNumber();
+			System.out.print(id + "  " + name + "\t\t" + phone + "\n");
+		}
+	}
+
+	private void printMenu() {
+		System.out.println("\n1) Show all users\n"
+				+ "2) Add user\n"
+				+ "3) Delete user\n"
+				+ "4) Exit\n");
+	}
+
+	public static void main(String[] argv) {
+		new PhoneBook();
 	}
 }

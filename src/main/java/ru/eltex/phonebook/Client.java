@@ -1,4 +1,4 @@
-package ru.eltex.server;
+package ru.eltex.phonebook;
 
 import java.io.*;
 import java.net.Socket;
@@ -71,8 +71,8 @@ public class Client implements Runnable{
     }
 
     private byte[] getHtmlUserTable(){
-        PhoneBook phoneBook = new PhoneBook();
-        ArrayList<User> users = phoneBook.getAllUsers();
+
+        DataBase dataBase = new SqlBase();
 
         StringBuilder builder = new StringBuilder();
         builder.append("<html><body><center>");
@@ -83,7 +83,7 @@ public class Client implements Runnable{
                 "<th>Name</th>" +
                 "<th>Number</th>" +
                 "</tr>");
-        for(User i : users){
+        for(User i : dataBase.getAllUsers()){
             builder.append("<tr>" +
                     "<td>" + i.getId() + "</td>" +
                     "<td>" + i.getName() + "</td>" +
