@@ -1,5 +1,10 @@
-plugins {
-    id 'java'
+apply plugin: 'application'
+apply plugin: 'java'
+apply plugin: 'findbugs'
+mainClassName = 'ru.eltex.phonebook.AppSpring'
+
+run{
+    standardInput = System.in
 }
 
 group 'Eltex'
@@ -19,3 +24,21 @@ dependencies {
     //compile('org.springframework.boot:spring_boot_starter_web')
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.0.4.RELEASE'
 }
+
+jar {
+    manifest{
+	attributes 'Main-Class':'ru.eltex.phonebook.PhoneBook'
+    }
+}
+
+task getDate(type:Exec){
+    commandLine "bash","-c", "date >> /tmp/date"
+}
+
+tasks.withType(FindBugs) {
+    reports {
+	xml.enabled = false
+	html.enabled = true
+    }
+}
+
