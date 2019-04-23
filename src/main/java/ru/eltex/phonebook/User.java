@@ -13,8 +13,18 @@ public class User {
 		idHolder = 0;
 	}
 
-	public Integer getId() {
+	public int getId() {
 		return id;
+	}
+
+	private void setId(int id){
+		try {
+			if(idHolder < id)
+				idHolder = id;
+			this.id = id;
+		}catch (NullPointerException e){
+			throw new NullPointerException("field 'id' is null");
+		}
 	}
 	
 	public String getName() {
@@ -22,8 +32,12 @@ public class User {
 	}
 	
 	private void setName(String name) {
-		if(!name.isEmpty()) {
+		try {
+			if (name.isEmpty())
+				throw new IllegalArgumentException("field 'name' is empty");
 			this.name = name;
+		}catch (NullPointerException e){
+			throw new NullPointerException("field 'name' is null");
 		}
 	}
 	
@@ -32,19 +46,22 @@ public class User {
 	}
 	
 	private void setPhoneNumber(String phoneNumber) {
-		if(!phoneNumber.isEmpty()) {
+		try {
+			if(phoneNumber.isEmpty())
+				throw new IllegalArgumentException("field 'phoneNumber' is empty");
 			this.phoneNumber = phoneNumber;
+
+		}catch (NullPointerException e){
+			throw new NullPointerException("field 'phoneNumber' is null");
 		}
 	}
 
-	User(String name, String phoneNumber){
+	public User(String name, String phoneNumber){
 		this(++idHolder, name, phoneNumber);
 	}
 	
-	User(int id, String name, String phoneNumber){
-		if(idHolder < id)
-			idHolder = id;
-		this.id = id;
+	public User(int id, String name, String phoneNumber){
+		setId(id);
 		setName(name);
 		setPhoneNumber(phoneNumber);
 	}
